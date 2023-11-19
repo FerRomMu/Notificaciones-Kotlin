@@ -1,4 +1,7 @@
 package model
+import exceptions.DuplicateUsernameException
+import exceptions.ExistingTopicException
+import exceptions.NonExistentTopicException
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -29,12 +32,26 @@ class AlertSystemTest {
     }
 
     @Test
+    fun `no se puede registrar un usuario para recibir alertas con username repetido`(){
+        val userB = User("UsuarioA")
+
+        assertThrows(DuplicateUsernameException::class.java) { system.register(userB) }
+    }
+
+    @Test
     fun `se puede registrar temas  sobre los cuales se enviarán alertas`(){
         val topicB = Topic("TemaB")
 
         system.registerTopic(topicB)
 
         assertTrue(system.isTopicAlert(topicB))
+    }
+
+    @Test
+    fun `no se puede registrar un tema repetido`(){
+        val topicRepeated = Topic("TemaA")
+
+        assertThrows(ExistingTopicException::class.java) { system.registerTopic(topicRepeated) }
     }
 
     @Test
@@ -50,4 +67,13 @@ class AlertSystemTest {
         assertTrue(system.isSubscribedTo(user, topicFollowed))
         assertFalse(system.isSubscribedTo(user, topicUnfollowed))
     }
+
+    @Test
+    fun `un usuario no se puede suscribir o desuscribir a un tema no registrado`(){
+        val nonExistentTopic = Topic("TemaB")
+
+        assertThrows(NonExistentTopicException::class.java) { system.subscribeUserTo(user, nonExistentTopic) }
+        assertThrows(NonExistentTopicException::class.java) { system.unsubscribeUserTo(user, nonExistentTopic) }
+    }
+
 }
