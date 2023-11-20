@@ -23,13 +23,13 @@ class TopicObservable(val subscribers: HashSet<AlertObserver>) : AlertObservable
         subscribers.map { subcriber -> subcriber.update(alert) }
     }
 
-    override fun notifyObserver(alert: Alert, subscriber: UserObserver) {
+    override fun notifyObserver(alert: Alert, subscriber: AlertObserver) {
         if (!subscribers.contains(subscriber)) { throw NonExistentSubscriberException() }
         notifications.add(TopicNotification(alert, Receiver.SINGLE_USER))
         subscriber.update(alert)
     }
 
-    fun isObserver(userObserver: UserObserver): Boolean =
+    fun isObserver(userObserver: AlertObserver): Boolean =
         subscribers.contains(userObserver)
 
     fun getNotifications(): List<TopicNotification> =
