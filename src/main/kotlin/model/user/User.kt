@@ -20,8 +20,9 @@ data class User(val userName: String,
     fun hasNotification(alert: Alert): Boolean =
         notifications.contains(Notification(alert))
 
-    fun notificationsNotExpired(): List<Alert> =
+    fun getNotifications(): List<Alert> =
         notifications
-            .filter { notification -> !notification.isExpired() }
+            .filter { notification ->
+                !notification.isExpired() && !notification.isReaden }
             .map { notification -> notification.alert }
 }

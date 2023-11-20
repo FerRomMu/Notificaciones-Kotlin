@@ -1,6 +1,5 @@
 package model
 import exceptions.NonExistentNotificationException
-import exceptions.NonExistentSubscriberException
 import model.alert.Alert
 import model.alert.AlertPriority
 import model.topic.Topic
@@ -127,10 +126,29 @@ class UserTest {
         user.addNotification(alertNonExpired2)
         user.addNotification(alertExpired)
 
-        val alertsNonExpired: List<Alert> = user.notificationsNotExpired()
+        val alertsNonExpired: List<Alert> = user.getNotifications()
 
         assertTrue(alertsNonExpired.contains(alertNonExpired))
         assertTrue(alertsNonExpired.contains(alertNonExpired2))
+        assertFalse(alertsNonExpired.contains(alertExpired))
+    }
+
+    @Test
+    fun `las notificaciones marcadas como leidas no se obtienen`(){
+        val oldDate = LocalDateTime.now().minus(Duration.ofDays(10))
+        val futureDate = LocalDateTime.now().plus(Duration.ofDays(10))
+        val alertNonExpired = Alert(2, topic, AlertPriority.INFORMATIVA, futureDate)
+        val readAlert = Alert(3, topic, AlertPriority.INFORMATIVA, futureDate)
+        val alertExpired = Alert(4, topic, AlertPriority.INFORMATIVA, oldDate)
+        user.addNotification(alertNonExpired)
+        user.addNotification(readAlert)
+        user.addNotification(alertExpired)
+
+        user.markAsRead(readAlert)
+        val alertsNonExpired: List<Alert> = user.getNotifications()
+
+        assertTrue(alertsNonExpired.contains(alertNonExpired))
+        assertFalse(alertsNonExpired.contains(readAlert))
         assertFalse(alertsNonExpired.contains(alertExpired))
     }
 }
