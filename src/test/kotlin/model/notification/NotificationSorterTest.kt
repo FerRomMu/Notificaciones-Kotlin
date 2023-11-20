@@ -1,17 +1,12 @@
 package model.notification
-import exceptions.*
-import model.AlertSystem
 import model.alert.Alert
 import model.alert.AlertPriority
-import model.topic.Receiver
 import model.topic.Topic
-import model.user.User
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import java.time.Duration
-import java.time.LocalDateTime
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NotificationSorterTest {

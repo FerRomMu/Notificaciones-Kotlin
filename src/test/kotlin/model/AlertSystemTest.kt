@@ -2,9 +2,9 @@ package model
 import exceptions.*
 import model.alert.Alert
 import model.alert.AlertPriority
+import model.notification.TopicNotification
 import model.topic.Receiver
 import model.topic.Topic
-import model.notification.TopicNotification
 import model.user.User
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach

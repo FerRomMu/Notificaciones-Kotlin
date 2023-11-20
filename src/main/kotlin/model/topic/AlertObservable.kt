@@ -2,7 +2,6 @@ package model.topic
 
 import model.alert.Alert
 import model.user.AlertObserver
-import model.user.UserObserver
 
 interface AlertObservable {
     fun addObserver(observer: AlertObserver): Any

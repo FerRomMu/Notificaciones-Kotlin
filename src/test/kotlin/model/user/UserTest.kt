@@ -1,15 +1,15 @@
-package model
+package model.user
 import exceptions.NonExistentNotificationException
+import model.AlertSystem
 import model.alert.Alert
 import model.alert.AlertPriority
 import model.topic.Topic
-import model.user.User
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import java.time.LocalDateTime
 import java.time.Duration
+import java.time.LocalDateTime
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserTest {

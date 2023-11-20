@@ -1,13 +1,11 @@
 package model.notification
 
-import model.AlertSystem
 import model.alert.Alert
 import model.alert.AlertPriority
 import model.topic.Receiver
 import model.topic.Topic
-import model.user.User
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Duration

@@ -1,8 +1,8 @@
 package model.user
 
 import exceptions.NonExistentNotificationException
-import model.notification.NotificationSorter
 import model.alert.Alert
+import model.notification.NotificationSorter
 import model.notification.UserNotification
 
 data class User(val userName: String) {

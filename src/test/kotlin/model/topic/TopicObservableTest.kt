@@ -4,13 +4,10 @@ import exceptions.NonExistentSubscriberException
 import model.alert.Alert
 import model.alert.AlertPriority
 import model.user.AlertObserver
-import model.user.UserObserver
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
-import java.time.Duration
-import java.time.LocalDateTime
 
 class TopicObservableTest {
 

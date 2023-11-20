@@ -1,7 +1,6 @@
 package model.notification
 
 import model.alert.AlertPriority
-import model.topic.Receiver
 import java.util.*
 
 class NotificationSorter<T : Notification>() {
