@@ -11,7 +11,7 @@ import model.topic.TopicObservable
 import model.user.User
 import model.user.UserObserver
 
-class AlertSystem {
+class AlertHandler {
 
     private val users: HashMap<User, UserObserver> = HashMap()
     private val topicsObservables: HashMap<Topic, TopicObservable> = HashMap()

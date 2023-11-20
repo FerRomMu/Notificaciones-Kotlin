@@ -14,3 +14,7 @@ Un usuario puede marcar una alerta como leída.
 Se pueden obtener todas las alertas no expiradas de un usuario que aún no ha leído. 
 Se pueden obtener todas las alertas no expiradas para un tema. Se informa para cada alerta si es para todos los usuarios o para uno específico.
 Tanto para el punto 9 como el 10, el ordenamiento de las alertas es el siguiente: las Urgentes van al inicio, siendo la última en llegar la primera en obtenerse (LIFO). Y a continuación las informativas, siendo la primera en llegar la primera en obtenerse (FIFO).
+
+## UML
+
+![UML](doc/UML.jpg)

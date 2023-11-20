@@ -14,16 +14,16 @@ import java.time.Duration
 import java.time.LocalDateTime
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AlertSystemTest {
+class AlertHandlerTest {
 
-    lateinit var system: AlertSystem
+    lateinit var system: AlertHandler
     lateinit var user: User
     lateinit var topic: Topic
     lateinit var alert: Alert
 
     @BeforeEach
     fun setup(){
-        system = AlertSystem()
+        system = AlertHandler()
         user = User("UsuarioA")
         topic = Topic("TemaA")
         alert = Alert(1, topic, AlertPriority.INFORMATIVA)

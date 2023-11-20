@@ -1,6 +1,6 @@
 package model.user
 import exceptions.NonExistentNotificationException
-import model.AlertSystem
+import model.AlertHandler
 import model.alert.Alert
 import model.alert.AlertPriority
 import model.topic.Topic
@@ -14,14 +14,14 @@ import java.time.LocalDateTime
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserTest {
 
-    lateinit var system: AlertSystem
+    lateinit var system: AlertHandler
     lateinit var user: User
     lateinit var topic: Topic
     lateinit var alert: Alert
 
     @BeforeEach
     fun setup(){
-        system = AlertSystem()
+        system = AlertHandler()
         user = User("UsuarioA")
         topic = Topic("TemaA")
         alert = Alert(1, topic, AlertPriority.INFORMATIVA)
