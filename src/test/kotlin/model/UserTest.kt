@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import java.time.LocalDateTime
+import java.time.Duration
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserTest {
@@ -112,5 +114,23 @@ class UserTest {
         val alertB = Alert(2, topic, AlertPriority.INFORMATIVA)
 
         assertThrows(NonExistentNotificationException::class.java) { user.markAsRead(alertB) }
+    }
+
+    @Test
+    fun `se puede obtener las notificaciones no expiradas de un usuario`(){
+        val oldDate = LocalDateTime.now().minus(Duration.ofDays(10))
+        val futureDate = LocalDateTime.now().plus(Duration.ofDays(10))
+        val alertNonExpired = Alert(2, topic, AlertPriority.INFORMATIVA, futureDate)
+        val alertNonExpired2 = Alert(3, topic, AlertPriority.INFORMATIVA, futureDate)
+        val alertExpired = Alert(4, topic, AlertPriority.INFORMATIVA, oldDate)
+        user.addNotification(alertNonExpired)
+        user.addNotification(alertNonExpired2)
+        user.addNotification(alertExpired)
+
+        val alertsNonExpired: List<Alert> = user.notificationsNotExpired()
+
+        assertTrue(alertsNonExpired.contains(alertNonExpired))
+        assertTrue(alertsNonExpired.contains(alertNonExpired2))
+        assertFalse(alertsNonExpired.contains(alertExpired))
     }
 }

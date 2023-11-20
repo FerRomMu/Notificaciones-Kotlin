@@ -6,4 +6,4 @@ import java.time.LocalDateTime
 data class Alert(val id: Int,
                  val topic: Topic,
                  val alertPriority: AlertPriority,
-                 val fechaExpiracion: LocalDateTime? = null)
+                 val expirationDate: LocalDateTime? = null)
