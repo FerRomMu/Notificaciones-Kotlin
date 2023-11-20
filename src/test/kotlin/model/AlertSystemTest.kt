@@ -1,7 +1,5 @@
 package model
-import exceptions.DuplicateUsernameException
-import exceptions.ExistingTopicException
-import exceptions.NonExistentTopicException
+import exceptions.*
 import model.topic.Topic
 import model.user.User
 import org.junit.jupiter.api.Assertions.*
@@ -13,13 +11,16 @@ import org.junit.jupiter.api.TestInstance
 class AlertSystemTest {
 
     lateinit var system: AlertSystem
-    val user = User("UsuarioA")
-    val topic = Topic("TemaA")
+    lateinit var user: User
+    lateinit var topic: Topic
+    lateinit var alert: Alert
 
     @BeforeEach
     fun setup(){
         system = AlertSystem()
-
+        user = User("UsuarioA")
+        topic = Topic("TemaA")
+        alert = Alert(1, topic)
         system.register(user)
         system.registerTopic(topic)
     }
@@ -76,6 +77,23 @@ class AlertSystemTest {
 
         assertThrows(NonExistentTopicException::class.java) { system.subscribeUserTo(user, nonExistentTopic) }
         assertThrows(NonExistentTopicException::class.java) { system.unsubscribeUserTo(user, nonExistentTopic) }
+    }
+
+    @Test
+    fun `un usuario no se puede suscribir o desuscribir a un tema si el no esta registrado`(){
+        val nonExistantUser = User("userB")
+
+        assertThrows(NonExistentUserException::class.java) { system.subscribeUserTo(nonExistantUser, topic) }
+        assertThrows(NonExistentUserException::class.java) { system.unsubscribeUserTo(nonExistantUser, topic) }
+    }
+
+    @Test
+    fun `si se envia a un solo usuario una alerta para un tema que no esta suscripto falla`(){
+        val userA = User("UserA")
+        system.register(userA)
+        system.unsubscribeUserTo(userA, topic)
+
+        assertThrows(NonExistentSubscriberException::class.java) { system.sendAlertTo(alert, userA) }
     }
 
 }

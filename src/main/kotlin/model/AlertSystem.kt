@@ -3,6 +3,7 @@ package model
 import exceptions.DuplicateUsernameException
 import exceptions.ExistingTopicException
 import exceptions.NonExistentTopicException
+import exceptions.NonExistentUserException
 import model.topic.Topic
 import model.topic.TopicObservable
 import model.user.User
@@ -16,7 +17,7 @@ class AlertSystem {
     private fun topicObservable(topicFollowed: Topic) =
         topicsObservables[topicFollowed] ?: throw NonExistentTopicException()
     private fun userObserver(user: User) =
-        users[user] ?: throw NonExistentTopicException()
+        users[user] ?: throw NonExistentUserException()
 
     fun register(user: User) {
         if (isRegitered(user)) { throw DuplicateUsernameException() }
@@ -39,8 +40,11 @@ class AlertSystem {
     fun isSubscribedTo(user: User, topic: Topic): Boolean =
         topicObservable(topic).isObserver(userObserver(user))
 
-    fun sendAlert(alert: Alert) {
+    fun sendAlert(alert: Alert) =
         topicObservable(alert.topic).notifyObservers(alert)
-    }
+
+    fun sendAlertTo(alert: Alert, user: User) =
+        topicObservable(alert.topic)
+            .notifyObserver(alert, userObserver(user))
 
 }
