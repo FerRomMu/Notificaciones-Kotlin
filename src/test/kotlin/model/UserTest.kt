@@ -1,4 +1,6 @@
 package model
+import exceptions.NonExistentNotificationException
+import exceptions.NonExistentSubscriberException
 import model.alert.Alert
 import model.alert.AlertPriority
 import model.topic.Topic
@@ -30,7 +32,7 @@ class UserTest {
     fun `un usuario recibe alertas si esta registrado en el sistema`(){
         system.sendAlert(alert)
 
-        assertEquals(alert, user.notifications.first())
+        assertTrue(user.hasNotification(alert))
     }
 
     @Test
@@ -39,7 +41,7 @@ class UserTest {
 
         system.sendAlert(alert)
 
-        assertTrue(user.notifications.isEmpty())
+        assertFalse(user.hasNotification(alert))
     }
 
     @Test
@@ -50,7 +52,7 @@ class UserTest {
 
         system.sendAlert(alert)
 
-        assertEquals(alert, user.notifications.first())
+        assertTrue(user.hasNotification(alert))
     }
 
     @Test
@@ -66,9 +68,9 @@ class UserTest {
 
         system.sendAlert(alert)
 
-        assertEquals(alert, userA.notifications.first())
-        assertEquals(alert, userB.notifications.first())
-        assertTrue(userNotSubscried.notifications.isEmpty())
+        assertTrue(userA.hasNotification(alert))
+        assertTrue(userB.hasNotification(alert))
+        assertFalse(userNotSubscried.hasNotification(alert))
     }
 
     @Test
@@ -85,8 +87,30 @@ class UserTest {
 
         system.sendAlertTo(alert, userA)
 
-        assertEquals(alert, userA.notifications.first())
-        assertTrue(userB.notifications.isEmpty())
-        assertTrue(userC.notifications.isEmpty())
+        assertTrue(userA.hasNotification(alert))
+        assertFalse(userB.hasNotification(alert))
+        assertFalse(userC.hasNotification(alert))
+    }
+
+    @Test
+    fun `un usuario por defecto tiene las alertas como no leidas`(){
+        user.addNotification(alert)
+
+        assertFalse(user.isReaden(alert))
+    }
+
+    @Test
+    fun `si un usuario marca como leida una alerta, esta pasa a estar marcada como leida`(){
+        user.addNotification(alert)
+        user.markAsRead(alert)
+
+        assertTrue(user.isReaden(alert))
+    }
+
+    @Test
+    fun `si un usuario marca como leida una alerta que no tiene, falla`(){
+        val alertB = Alert(2, topic, AlertPriority.INFORMATIVA)
+
+        assertThrows(NonExistentNotificationException::class.java) { user.markAsRead(alertB) }
     }
 }
