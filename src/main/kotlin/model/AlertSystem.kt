@@ -3,39 +3,44 @@ package model
 import exceptions.DuplicateUsernameException
 import exceptions.ExistingTopicException
 import exceptions.NonExistentTopicException
+import model.topic.Topic
+import model.topic.TopicObservable
+import model.user.User
+import model.user.UserObserver
 
 class AlertSystem {
 
-    private val registry: HashSet<User> = HashSet()
-    private val topicsSuscriptions: HashMap<Topic, HashSet<User>> = HashMap()
+    private val users: HashMap<User, UserObserver> = HashMap()
+    private val topicsObservables: HashMap<Topic, TopicObservable> = HashMap()
+
+    private fun topicObservable(topicFollowed: Topic) =
+        topicsObservables[topicFollowed] ?: throw NonExistentTopicException()
+    private fun userObserver(user: User) =
+        users[user] ?: throw NonExistentTopicException()
 
     fun register(user: User) {
-        val isNewUsername = registry.add(user)
-        if (!isNewUsername) {
-            throw DuplicateUsernameException()
-        }
+        if (isRegitered(user)) { throw DuplicateUsernameException() }
+        users[user] = UserObserver(user)
     }
-    fun isRegitered(user: User): Boolean = registry.contains(user)
+    fun isRegitered(user: User): Boolean = users.contains(user)
 
     fun registerTopic(topic: Topic) {
         if (isTopicAlert(topic)) { throw ExistingTopicException() }
-        topicsSuscriptions[topic] = HashSet(registry)
+        topicsObservables[topic] = TopicObservable(users.values.toHashSet())
     }
-    fun isTopicAlert(topic: Topic): Boolean = topicsSuscriptions.contains(topic)
+    fun isTopicAlert(topic: Topic): Boolean = topicsObservables.contains(topic)
 
     fun subscribeUserTo(user: User, topicFollowed: Topic) =
-        topicSuscribers(topicFollowed).add(user)
+        topicObservable(topicFollowed)
+            .addObserver(userObserver(user))
     fun unsubscribeUserTo(user: User, topicUnfollowed: Topic) =
-        topicSuscribers(topicUnfollowed).remove(user)
-
-    private fun topicSuscribers(topicFollowed: Topic) =
-        topicsSuscriptions[topicFollowed] ?: throw NonExistentTopicException()
-
+        topicObservable(topicUnfollowed)
+            .removeObserver(userObserver(user))
     fun isSubscribedTo(user: User, topic: Topic): Boolean =
-        topicsSuscriptions[topic]!!.contains(user)
+        topicObservable(topic).isObserver(userObserver(user))
 
     fun sendAlert(alert: Alert) {
-        topicSuscribers(alert.topic).map { user -> user.notifications.add(alert) }
+        topicObservable(alert.topic).notifyObservers(alert)
     }
 
 }

@@ -1,7 +1,6 @@
 package model
-import exceptions.DuplicateUsernameException
-import exceptions.ExistingTopicException
-import exceptions.NonExistentTopicException
+import model.topic.Topic
+import model.user.User
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
