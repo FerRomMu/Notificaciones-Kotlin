@@ -48,4 +48,7 @@ class AlertSystem {
         topicObservable(alert.topic)
             .notifyObserver(alert, userObserver(user))
 
+    fun getAlertsFromTopic(topic: Topic): List<Alert> =
+        topicObservable(topic).getAlerts()
+
 }

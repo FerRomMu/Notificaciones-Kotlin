@@ -9,7 +9,5 @@ data class Notification(val alert: Alert, var isReaden: Boolean = false) {
         isReaden = true
     }
 
-    fun isExpired(): Boolean =
-        alert.expirationDate == null
-                || alert.expirationDate < LocalDateTime.now()
+    fun isExpired(): Boolean = alert.isExpired()
 }
