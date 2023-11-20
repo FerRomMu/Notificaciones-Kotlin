@@ -1,6 +1,6 @@
 package model.topic
 
-import model.Alert
+import model.alert.Alert
 import model.user.AlertObserver
 import model.user.UserObserver
 

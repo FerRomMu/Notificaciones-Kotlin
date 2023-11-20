@@ -1,6 +1,6 @@
 package model.user
 
-import model.Alert
+import model.alert.Alert
 
 interface AlertObserver {
     fun update(alert: Alert): Any

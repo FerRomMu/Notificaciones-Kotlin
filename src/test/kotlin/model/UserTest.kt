@@ -1,6 +1,6 @@
 package model
-import exceptions.NonExistentSubscriberException
-import exceptions.NonExistentUserException
+import model.alert.Alert
+import model.alert.AlertPriority
 import model.topic.Topic
 import model.user.User
 import org.junit.jupiter.api.Assertions.*
@@ -21,7 +21,7 @@ class UserTest {
         system = AlertSystem()
         user = User("UsuarioA")
         topic = Topic("TemaA")
-        alert = Alert(1, topic)
+        alert = Alert(1, topic, AlertPriority.INFORMATIVA)
         system.register(user)
         system.registerTopic(topic)
     }

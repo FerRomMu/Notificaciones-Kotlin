@@ -1,9 +1,8 @@
 package model.topic
 
 import exceptions.NonExistentSubscriberException
-import model.Alert
+import model.alert.Alert
 import model.user.AlertObserver
-import model.user.User
 import model.user.UserObserver
 
 class TopicObservable(val subscribers: HashSet<AlertObserver>) : AlertObservable {

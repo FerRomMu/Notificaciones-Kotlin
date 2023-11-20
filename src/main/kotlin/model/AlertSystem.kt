@@ -4,6 +4,7 @@ import exceptions.DuplicateUsernameException
 import exceptions.ExistingTopicException
 import exceptions.NonExistentTopicException
 import exceptions.NonExistentUserException
+import model.alert.Alert
 import model.topic.Topic
 import model.topic.TopicObservable
 import model.user.User
