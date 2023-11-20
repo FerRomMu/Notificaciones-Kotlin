@@ -151,4 +151,31 @@ class UserTest {
         assertFalse(alertsNonExpired.contains(readAlert))
         assertFalse(alertsNonExpired.contains(alertExpired))
     }
+
+    @Test
+    fun `el orden de las notificaciones es LIFO para prioritas y FIFO informativas`(){
+        // I1,I2,U1,I3,U2,I4
+        val informativeAlert1 = Alert(1, topic, AlertPriority.INFORMATIVA)
+        val informativeAlert2 = Alert(2, topic, AlertPriority.INFORMATIVA)
+        val informativeAlert3 = Alert(3, topic, AlertPriority.INFORMATIVA)
+        val informativeAlert4 = Alert(4, topic, AlertPriority.INFORMATIVA)
+        val urgentAlert1 = Alert(1, topic, AlertPriority.URGENTE)
+        val urgentAlert2 = Alert(2, topic, AlertPriority.URGENTE)
+        user.addNotification(informativeAlert1)
+        user.addNotification(informativeAlert2)
+        user.addNotification(urgentAlert1)
+        user.addNotification(informativeAlert3)
+        user.addNotification(urgentAlert2)
+        user.addNotification(informativeAlert4)
+
+        val alerts: List<Alert> = user.getNotifications()
+
+        // U2,U1,I1,I2,I3,I4
+        assertEquals(urgentAlert2, alerts[0])
+        assertEquals(urgentAlert1, alerts[1])
+        assertEquals(informativeAlert1, alerts[2])
+        assertEquals(informativeAlert2, alerts[3])
+        assertEquals(informativeAlert3, alerts[4])
+        assertEquals(informativeAlert4, alerts[5])
+    }
 }

@@ -156,17 +156,17 @@ class AlertSystemTest {
         system.sendAlert(urgentAlert2)
         system.sendAlert(informativeAlert4)
 
-        val notificationsNonExpired: List<Alert> =
+        val notifications: List<Alert> =
             system
                 .getNotificationsFromTopic(topic)
                 .map { notification -> notification.alert }
 
         // U2,U1,I1,I2,I3,I4
-        assertEquals(urgentAlert2, notificationsNonExpired[0])
-        assertEquals(urgentAlert1, notificationsNonExpired[1])
-        assertEquals(informativeAlert1, notificationsNonExpired[2])
-        assertEquals(informativeAlert2, notificationsNonExpired[3])
-        assertEquals(informativeAlert3, notificationsNonExpired[4])
-        assertEquals(informativeAlert4, notificationsNonExpired[5])
+        assertEquals(urgentAlert2, notifications[0])
+        assertEquals(urgentAlert1, notifications[1])
+        assertEquals(informativeAlert1, notifications[2])
+        assertEquals(informativeAlert2, notifications[3])
+        assertEquals(informativeAlert3, notifications[4])
+        assertEquals(informativeAlert4, notifications[5])
     }
 }
