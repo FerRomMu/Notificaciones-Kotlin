@@ -8,5 +8,5 @@ data class Alert(val id: Int,
                  val alertPriority: AlertPriority,
                  val expirationDate: LocalDateTime? = null) {
 
-    fun isExpired(): Boolean = expirationDate == null || expirationDate < LocalDateTime.now()
+    fun isExpired(): Boolean = expirationDate != null && expirationDate < LocalDateTime.now()
 }

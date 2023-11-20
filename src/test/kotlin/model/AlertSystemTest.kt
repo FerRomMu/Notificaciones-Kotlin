@@ -4,7 +4,7 @@ import model.alert.Alert
 import model.alert.AlertPriority
 import model.topic.Receiver
 import model.topic.Topic
-import model.topic.TopicNotification
+import model.notification.TopicNotification
 import model.user.User
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -138,5 +138,35 @@ class AlertSystemTest {
 
         assertEquals(Receiver.ALL_USERS, notificationsNonExpired[0].sendTo)
         assertEquals(Receiver.SINGLE_USER, notificationsNonExpired[1].sendTo)
+    }
+
+    @Test
+    fun `el orden de las notificaciones es LIFO para prioritas y FIFO informativas`(){
+        // I1,I2,U1,I3,U2,I4
+        val informativeAlert1 = Alert(2, topic, AlertPriority.INFORMATIVA)
+        val informativeAlert2 = Alert(3, topic, AlertPriority.INFORMATIVA)
+        val informativeAlert3 = Alert(3, topic, AlertPriority.INFORMATIVA)
+        val informativeAlert4 = Alert(3, topic, AlertPriority.INFORMATIVA)
+        val urgentAlert1 = Alert(4, topic, AlertPriority.URGENTE)
+        val urgentAlert2 = Alert(5, topic, AlertPriority.URGENTE)
+        system.sendAlert(informativeAlert1)
+        system.sendAlert(informativeAlert2)
+        system.sendAlert(urgentAlert1)
+        system.sendAlert(informativeAlert3)
+        system.sendAlert(urgentAlert2)
+        system.sendAlert(informativeAlert4)
+
+        val notificationsNonExpired: List<Alert> =
+            system
+                .getNotificationsFromTopic(topic)
+                .map { notification -> notification.alert }
+
+        // U2,U1,I1,I2,I3,I4
+        assertEquals(urgentAlert2, notificationsNonExpired[0])
+        assertEquals(urgentAlert1, notificationsNonExpired[1])
+        assertEquals(informativeAlert1, notificationsNonExpired[1])
+        assertEquals(informativeAlert2, notificationsNonExpired[1])
+        assertEquals(informativeAlert3, notificationsNonExpired[1])
+        assertEquals(informativeAlert4, notificationsNonExpired[1])
     }
 }

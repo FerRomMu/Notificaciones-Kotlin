@@ -1,13 +1,18 @@
 package model.topic
 
 import exceptions.NonExistentSubscriberException
+import model.NotificationSorter
 import model.alert.Alert
+import model.notification.Notification
+import model.notification.TopicNotification
 import model.user.AlertObserver
 import model.user.UserObserver
+import java.util.*
+import kotlin.collections.HashSet
 
 class TopicObservable(val subscribers: HashSet<AlertObserver>) : AlertObservable {
 
-    private val topicNotifications: MutableList<TopicNotification> = mutableListOf()
+    private val notifications: NotificationSorter<TopicNotification> = NotificationSorter()
 
     override fun addObserver(observer: AlertObserver) =
         subscribers.add(observer)
@@ -16,13 +21,13 @@ class TopicObservable(val subscribers: HashSet<AlertObserver>) : AlertObservable
         subscribers.remove(observer)
 
     override fun notifyObservers(alert: Alert) {
-        topicNotifications.add(TopicNotification(alert, Receiver.ALL_USERS))
+        notifications.add(TopicNotification(alert, Receiver.ALL_USERS))
         subscribers.map { subcriber -> subcriber.update(alert) }
     }
 
     override fun notifyObserver(alert: Alert, subscriber: UserObserver) {
         if (!subscribers.contains(subscriber)) { throw NonExistentSubscriberException() }
-        topicNotifications.add(TopicNotification(alert, Receiver.SINGLE_USER))
+        notifications.add(TopicNotification(alert, Receiver.SINGLE_USER))
         subscriber.update(alert)
     }
 
@@ -30,7 +35,8 @@ class TopicObservable(val subscribers: HashSet<AlertObserver>) : AlertObservable
         subscribers.contains(userObserver)
 
     fun getNotifications(): List<TopicNotification> =
-        topicNotifications
+        notifications
+            .get()
             .filter { notification -> !notification.isExpired() }
 
 }

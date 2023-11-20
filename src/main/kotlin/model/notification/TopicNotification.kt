@@ -1,10 +1,11 @@
-package model.topic
+package model.notification
 
 import model.alert.Alert
+import model.topic.Receiver
 
 data class TopicNotification(
-    val alert: Alert,
+    override val alert: Alert,
     val sendTo: Receiver
-) {
+): Notification {
     fun isExpired() = alert.isExpired()
 }
