@@ -1,13 +1,11 @@
 package model.topic
 
 import exceptions.NonExistentSubscriberException
-import model.NotificationSorter
+import model.notification.NotificationSorter
 import model.alert.Alert
-import model.notification.Notification
 import model.notification.TopicNotification
 import model.user.AlertObserver
 import model.user.UserObserver
-import java.util.*
 import kotlin.collections.HashSet
 
 class TopicObservable(val subscribers: HashSet<AlertObserver>) : AlertObservable {

@@ -1,7 +1,7 @@
 package model.user
 
 import exceptions.NonExistentNotificationException
-import model.NotificationSorter
+import model.notification.NotificationSorter
 import model.alert.Alert
 import model.notification.UserNotification
 

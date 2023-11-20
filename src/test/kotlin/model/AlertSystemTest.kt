@@ -143,12 +143,12 @@ class AlertSystemTest {
     @Test
     fun `el orden de las notificaciones es LIFO para prioritas y FIFO informativas`(){
         // I1,I2,U1,I3,U2,I4
-        val informativeAlert1 = Alert(2, topic, AlertPriority.INFORMATIVA)
-        val informativeAlert2 = Alert(3, topic, AlertPriority.INFORMATIVA)
+        val informativeAlert1 = Alert(1, topic, AlertPriority.INFORMATIVA)
+        val informativeAlert2 = Alert(2, topic, AlertPriority.INFORMATIVA)
         val informativeAlert3 = Alert(3, topic, AlertPriority.INFORMATIVA)
-        val informativeAlert4 = Alert(3, topic, AlertPriority.INFORMATIVA)
-        val urgentAlert1 = Alert(4, topic, AlertPriority.URGENTE)
-        val urgentAlert2 = Alert(5, topic, AlertPriority.URGENTE)
+        val informativeAlert4 = Alert(4, topic, AlertPriority.INFORMATIVA)
+        val urgentAlert1 = Alert(1, topic, AlertPriority.URGENTE)
+        val urgentAlert2 = Alert(2, topic, AlertPriority.URGENTE)
         system.sendAlert(informativeAlert1)
         system.sendAlert(informativeAlert2)
         system.sendAlert(urgentAlert1)
@@ -164,9 +164,9 @@ class AlertSystemTest {
         // U2,U1,I1,I2,I3,I4
         assertEquals(urgentAlert2, notificationsNonExpired[0])
         assertEquals(urgentAlert1, notificationsNonExpired[1])
-        assertEquals(informativeAlert1, notificationsNonExpired[1])
-        assertEquals(informativeAlert2, notificationsNonExpired[1])
-        assertEquals(informativeAlert3, notificationsNonExpired[1])
-        assertEquals(informativeAlert4, notificationsNonExpired[1])
+        assertEquals(informativeAlert1, notificationsNonExpired[2])
+        assertEquals(informativeAlert2, notificationsNonExpired[3])
+        assertEquals(informativeAlert3, notificationsNonExpired[4])
+        assertEquals(informativeAlert4, notificationsNonExpired[5])
     }
 }
