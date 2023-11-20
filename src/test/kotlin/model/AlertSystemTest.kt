@@ -2,7 +2,9 @@ package model
 import exceptions.*
 import model.alert.Alert
 import model.alert.AlertPriority
+import model.topic.Receiver
 import model.topic.Topic
+import model.topic.TopicNotification
 import model.user.User
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -111,10 +113,30 @@ class AlertSystemTest {
         system.sendAlert(alertNonExpired2)
         system.sendAlert(alertExpired)
 
-        val alertsNonExpired: List<Alert> = system.getAlertsFromTopic(topic)
+        val alertsNonExpired: List<Alert> = system
+            .getNotificationsFromTopic(topic)
+            .map { notification -> notification.alert }
 
         assertTrue(alertsNonExpired.contains(alertNonExpired))
         assertTrue(alertsNonExpired.contains(alertNonExpired2))
         assertFalse(alertsNonExpired.contains(alertExpired))
+    }
+
+    @Test
+    fun `se puede saber si la alerta fue grupal o a un usuario al obtener las alertas de un tema`(){
+        val oldDate = LocalDateTime.now().minus(Duration.ofDays(10))
+        val futureDate = LocalDateTime.now().plus(Duration.ofDays(10))
+        val alertToAll = Alert(2, topic, AlertPriority.INFORMATIVA, futureDate)
+        val alertToUser = Alert(3, topic, AlertPriority.INFORMATIVA, futureDate)
+        val alertExpired = Alert(4, topic, AlertPriority.INFORMATIVA, oldDate)
+        system.sendAlert(alertToAll)
+        system.sendAlertTo(alertToUser, user)
+        system.sendAlert(alertExpired)
+
+        val notificationsNonExpired: List<TopicNotification> =
+            system.getNotificationsFromTopic(topic)
+
+        assertEquals(Receiver.ALL_USERS, notificationsNonExpired[0].sendTo)
+        assertEquals(Receiver.SINGLE_USER, notificationsNonExpired[1].sendTo)
     }
 }

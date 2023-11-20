@@ -3,8 +3,9 @@ package model.user
 import exceptions.NonExistentNotificationException
 import model.alert.Alert
 
-data class User(val userName: String,
-    private val notifications: MutableList<Notification> = mutableListOf()) {
+data class User(val userName: String) {
+
+    private val notifications: MutableList<Notification> = mutableListOf()
 
     fun notification(alert: Alert) =
         notifications

@@ -29,9 +29,8 @@ class TopicObservable(val subscribers: HashSet<AlertObserver>) : AlertObservable
     fun isObserver(userObserver: UserObserver): Boolean =
         subscribers.contains(userObserver)
 
-    fun getAlerts(): List<Alert> =
+    fun getNotifications(): List<TopicNotification> =
         topicNotifications
             .filter { notification -> !notification.isExpired() }
-            .map { notification -> notification.alert }
 
 }

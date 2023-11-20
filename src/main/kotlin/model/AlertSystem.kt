@@ -6,6 +6,7 @@ import exceptions.NonExistentTopicException
 import exceptions.NonExistentUserException
 import model.alert.Alert
 import model.topic.Topic
+import model.topic.TopicNotification
 import model.topic.TopicObservable
 import model.user.User
 import model.user.UserObserver
@@ -48,7 +49,7 @@ class AlertSystem {
         topicObservable(alert.topic)
             .notifyObserver(alert, userObserver(user))
 
-    fun getAlertsFromTopic(topic: Topic): List<Alert> =
-        topicObservable(topic).getAlerts()
+    fun getNotificationsFromTopic(topic: Topic): List<TopicNotification> =
+        topicObservable(topic).getNotifications()
 
 }
